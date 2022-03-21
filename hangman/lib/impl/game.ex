@@ -27,8 +27,19 @@ defmodule Hangman.Impl.Game do
   @spec newGame(String.t()) :: t
   def newGame(word) do
     %__MODULE__{
-      letters: word |> String.downcase() |> String.codepoints()
+      letters: word
+      |> assertMinimalWordLength(String.length(word))
+      |> String.downcase()
+      |> String.codepoints()
     }
+  end
+
+  defp assertMinimalWordLength(_word, _length = 0) do
+    raise "Word not long enough"
+  end
+
+  defp assertMinimalWordLength(word, _length) do
+    word
   end
 
   @doc """
@@ -41,9 +52,20 @@ defmodule Hangman.Impl.Game do
     |> returnGameWithTally()
   end
 
+  # def makeMove(game, _guess = [guess]) do
   def makeMove(game, guess) do
-    acceptGuess(game, guess, MapSet.member?(game.used, guess))
+    game
+    |> validateGuess(Regex.match?(~r/^[a-z]$/, guess))
+    |> acceptGuess(guess, MapSet.member?(game.used, guess))
     |> returnGameWithTally()
+  end
+
+  defp validateGuess(game, true) do
+    game
+  end
+
+  defp validateGuess(_game, false) do
+    raise "Guess must be single lowercase ascii"
   end
 
   @spec returnGameWithTally(t) :: {t, Type.tally()}
@@ -58,6 +80,30 @@ defmodule Hangman.Impl.Game do
 
   defp acceptGuess(game, guess, _guess_already_used) do
     %{game | used: MapSet.put(game.used, guess)}
+    |> scoreGuess(Enum.member?(game.letters, guess))
+  end
+
+  @spec scoreGuess(t, boolean) :: t
+  defp scoreGuess(game, _guess_in_letters = true) do
+    new_state = MapSet.subset?(MapSet.new(game.letters), game.used) |> maybeWon()
+    %{game | game_state: new_state}
+  end
+
+  defp scoreGuess(game = %{turns_left: 1}, _guess_in_letters = false) do
+    %{game | game_state: :lost, turns_left: 0}
+  end
+
+  defp scoreGuess(game, _guess_in_letters = false) do
+    %{game | game_state: :bad_guess, turns_left: game.turns_left - 1}
+  end
+
+  @spec maybeWon(boolean) :: :good_guess | :won
+  defp maybeWon(true) do
+    :won
+  end
+
+  defp maybeWon(false) do
+    :good_guess
   end
 
   @spec tally(t) :: Type.tally()
@@ -65,8 +111,23 @@ defmodule Hangman.Impl.Game do
     %{
       turns_left: game.turns_left,
       game_state: game.game_state,
-      letters: [],
+      letters: revealLetters(game.used, game.letters),
       used: game.used |> MapSet.to_list()
     }
+  end
+
+  @spec revealLetters(MapSet.t, list) :: list
+  defp revealLetters(used, letters) do
+    letters
+    |> Enum.map(fn (letter) -> revealLetter(letter, Enum.member?(used, letter)) end)
+  end
+
+  @spec revealLetter(String.t, boolean) :: String.t
+  defp revealLetter(letter, _letter_guessed = true) do
+    letter
+  end
+
+  defp revealLetter(_letter, _letter_guessed = false) do
+    "_"
   end
 end

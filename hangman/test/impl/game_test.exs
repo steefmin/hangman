@@ -70,4 +70,76 @@ defmodule GameTest do
     assert tally.game_state === :already_used
     assert MapSet.equal?(game.used, MapSet.new(["x", "y"]))
   end
+
+  test "recognize guess in word" do
+    game = Game.newGame("wombat")
+    {game, tally} = Game.makeMove(game, "o")
+    assert game.game_state === :good_guess
+    assert tally.game_state === :good_guess
+    {game, tally} = Game.makeMove(game, "b")
+    assert game.game_state === :good_guess
+    assert tally.game_state === :good_guess
+  end
+
+  test "recognize bad guess in word" do
+    game = Game.newGame("wombat")
+    {game, tally} = Game.makeMove(game, "x")
+    assert game.game_state === :bad_guess
+    assert tally.game_state === :bad_guess
+    {game, tally} = Game.makeMove(game, "g")
+    assert game.game_state === :bad_guess
+    assert tally.game_state === :bad_guess
+  end
+
+  test "game lost when no tuns left" do
+    game = Game.newGame("x")
+    {game, tally} = Game.makeMove(game, "a")
+    assert tally.turns_left === 6
+    {game, tally} = Game.makeMove(game, "b")
+    assert tally.turns_left === 5
+    {game, tally} = Game.makeMove(game, "c")
+    assert tally.turns_left === 4
+    {game, tally} = Game.makeMove(game, "d")
+    assert tally.turns_left === 3
+    {game, tally} = Game.makeMove(game, "e")
+    assert tally.turns_left === 2
+    {game, tally} = Game.makeMove(game, "f")
+    assert tally.turns_left === 1
+    {game, tally} = Game.makeMove(game, "g")
+    assert tally.game_state === :lost
+    assert game.game_state === :lost
+    assert game.turns_left === 0
+    assert tally.turns_left === 0
+  end
+
+  test "game won when all correct letters guessed" do
+    game = Game.newGame("a")
+    {game, tally} = Game.makeMove(game, "a")
+    assert game.game_state === :won
+    assert tally.game_state === :won
+  end
+
+  test "double letters work" do
+    game = Game.newGame("aaa")
+    {game, tally} = Game.makeMove(game, "a")
+    assert game.game_state === :won
+    assert tally.game_state === :won
+  end
+
+  test "tally letters" do
+    game = Game.newGame("ab")
+    {game, tally} = Game.makeMove(game, "c")
+    assert tally.letters === ["_", "_"]
+    {game, tally} = Game.makeMove(game, "a")
+    assert tally.letters === ["a", "_"]
+    {game, tally} = Game.makeMove(game, "b")
+    assert tally.letters === ["a", "b"]
+    assert game.game_state === :won
+  end
+
+  test "makeMove only single characters" do
+    game = Game.newGame("a")
+    assert_raise RuntimeError, "Guess must be single lowercase ascii", fn -> Game.makeMove(game, "bb") end
+    assert_raise RuntimeError, "Guess must be single lowercase ascii", fn -> Game.makeMove(game, "é") end
+  end
 end
