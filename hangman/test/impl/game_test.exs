@@ -139,7 +139,10 @@ defmodule GameTest do
 
   test "makeMove only single characters" do
     game = Game.newGame("a")
-    assert_raise RuntimeError, "Guess must be single lowercase ascii", fn -> Game.makeMove(game, "bb") end
-    assert_raise RuntimeError, "Guess must be single lowercase ascii", fn -> Game.makeMove(game, "é") end
+    assert game.turns_left === 7
+    {game, _tally} = Game.makeMove(game, "bb")
+    {_game, tally} = Game.makeMove(game, "é")
+    assert tally.turns_left === 7
+    assert tally.game_state === :invalid_guess
   end
 end
