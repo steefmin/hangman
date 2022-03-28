@@ -25,7 +25,8 @@ defmodule TextClient.Impl.Player do
   def interact({game, tally}) do
     IO.puts feedbackFor(tally)
     IO.puts currentWord(tally)
-    Hangman.makeMove(game, getGuess())
+    game
+    |> Hangman.makeMove(getGuess())
     |> interact()
   end
 
@@ -54,9 +55,19 @@ defmodule TextClient.Impl.Player do
   @spec currentWord(tally) :: list(String.t)
   defp currentWord(tally) do
     [
-      "Word so far: #{tally.letters |> Enum.join(" ")}, ",
-      "turns left: #{tally.turns_left}, ",
-      "used already: #{tally.used |> Enum.join(", ")}",
+      "Word so far:       ",
+      tally.letters |> Enum.join(" "),
+      "                ",
+      IO.ANSI.green(),
+      "turns left: ",
+      IO.ANSI.cyan(),
+      tally.turns_left |> Integer.to_string(),
+      IO.ANSI.green(),
+      ", ",
+      "used already: ",
+      IO.ANSI.yellow(),
+      tally.used |> Enum.join(", "),
+      IO.ANSI.reset(),
     ]
   end
 

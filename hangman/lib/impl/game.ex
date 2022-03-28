@@ -121,6 +121,10 @@ defmodule Hangman.Impl.Game do
   end
 
   @spec revealLetters(t) :: list
+  defp revealLetters(game = %{game_state: state}) when state in [:won, :lost] do
+    game.letters
+  end
+
   defp revealLetters(game) do
     game.letters
     |> Enum.map(fn letter -> revealLetter(letter, Enum.member?(game.used, letter)) end)
