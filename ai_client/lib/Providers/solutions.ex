@@ -6,9 +6,8 @@ defmodule AiClient.Providers.Solutions do
     Dictionary.getWordList(length)
   end
 
-  @spec initialSolutions(Hangman.Impl.Game.t) :: list(String.t)
-  def initialSolutions(game) do
-    tally = Hangman.tally(game)
+  @spec initialSolutions(Type.tally) :: list(String.t)
+  def initialSolutions(tally) do
     tally.letters
     |> Enum.count()
     |> solutionsWithLength()

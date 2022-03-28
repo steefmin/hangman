@@ -5,18 +5,21 @@ defmodule AiClient.Domain.Ai do
 
   def start do
     game = Hangman.newGame()
-    guess({game, Hangman.tally(game)}, Solutions.initialSolutions(game), false)
+    tally = Hangman.tally(game)
+    guess({game, tally}, Solutions.initialSolutions(tally), false)
   end
 
   @spec start(integer) :: :ok
   def start(difficulty) do
     game = Hangman.newGame(difficulty)
-    guess({game, Hangman.tally(game)}, Solutions.initialSolutions(game), false)
+    tally = Hangman.tally(game)
+    guess({game, tally}, Solutions.initialSolutions(tally), false)
   end
 
   def step_by_step do
     game = Hangman.newGame()
-    guess({game, Hangman.tally(game)}, Solutions.initialSolutions(game), true)
+    tally = Hangman.tally(game)
+    guess({game, tally}, Solutions.initialSolutions(tally), true)
   end
 
   @spec guess({Hangman.Impl.Game.t, Type.tally}, solutions, boolean) :: :ok
@@ -35,11 +38,11 @@ defmodule AiClient.Domain.Ai do
     guess = determineGuess(tally, solutions)
     interact(tally, guess, solutions, interactive)
     {game, tally} = Hangman.makeMove(game, guess)
-    solutions = removeImpossibleSolutions(tally, solutions)
+    solutions = removeImpossibleSolutions(solutions, tally)
     guess({game, tally}, solutions, interactive)
   end
 
-  def removeImpossibleSolutions(tally, solutions) do
+  def removeImpossibleSolutions(solutions, tally) do
     solutions
     |> Enum.filter(fn (word) -> wordMatches(word, tally.letters) end)
   end
