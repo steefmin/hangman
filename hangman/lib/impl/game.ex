@@ -25,7 +25,7 @@ defmodule Hangman.Impl.Game do
   end
 
   @spec newGame(String.t()) :: t
-  def newGame(word) do
+  def newGame(word) when (word |> is_binary) do
     %__MODULE__{
       letters:
         word
@@ -33,6 +33,11 @@ defmodule Hangman.Impl.Game do
         |> String.downcase()
         |> String.codepoints()
     }
+  end
+
+  @spec newGame(integer) :: t
+  def newGame(wordlength) when (wordlength |> is_integer) do
+    newGame(Dictionary.randomWord(wordlength))
   end
 
   defp assertMinimalWordLength(_word, _length = 0) do
