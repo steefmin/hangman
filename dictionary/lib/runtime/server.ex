@@ -3,12 +3,12 @@ defmodule Dictionary.Runtime.Server do
 
   @type t :: pid
 
-  @spec start_link() :: {atom, t}
+  @spec start_link() :: Agent.on_start
   def start_link() do
     Agent.start_link(WordList, :start, [], name: __MODULE__)
   end
 
-  @spec start_link(integer) :: {atom, t}
+  @spec start_link(integer) :: Agent.on_start
   def start_link(wordlength) do
     Agent.start_link(WordList, :start, [wordlength], [{:name, buildAgentName(wordlength) }])
   end
