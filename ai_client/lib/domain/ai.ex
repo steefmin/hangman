@@ -11,6 +11,7 @@ defmodule AiClient.Domain.Ai do
   }
 
   @spec start() :: :ok
+
   def start() do
     game = Hangman.newGame()
     tally = Hangman.tally(game)
@@ -18,11 +19,14 @@ defmodule AiClient.Domain.Ai do
   end
 
   @spec start(integer) :: :ok
+
   def start(difficulty) when (difficulty |> is_integer) do
     game = Hangman.newGame(difficulty)
     tally = Hangman.tally(game)
     guess({game, tally}, Solutions.initialSolutions(tally), false)
   end
+
+  @spec step_by_step() :: :ok
 
   def step_by_step() do
     game = Hangman.newGame()
@@ -31,6 +35,7 @@ defmodule AiClient.Domain.Ai do
   end
 
   @spec guess(state, solutions, boolean) :: :ok
+
   defp guess({_game, tally}, _solutions, _interactive) when (tally.game_state in [:won, :lost]) do
     IO.puts(
       [
@@ -52,6 +57,7 @@ defmodule AiClient.Domain.Ai do
   end
 
   @spec determineGuess(Type.tally, solutions) :: String.t
+
   defp determineGuess(tally, solutions) do
     Solutions.getLetters(solutions)
     |> Enum.filter(fn (letter) -> letter not in tally.used end)

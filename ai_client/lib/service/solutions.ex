@@ -1,19 +1,23 @@
 defmodule AiClient.Service.Solutions do
+  alias AiClient.Domain.Ai
   alias Type
 
-  @spec initialSolutions(Type.tally) :: list(String.t)
+  @spec initialSolutions(Type.tally) :: Ai.solutions
+
   def initialSolutions(tally) do
     tally.letters
     |> Enum.count()
     |> solutionsWithLength()
   end
 
-  @spec solutionsWithLength(integer) :: list(String.t)
+  @spec solutionsWithLength(integer) :: Ai.solutions
+
   defp solutionsWithLength(length) when (length |> is_integer()) do
     Dictionary.getWordList(length)
   end
 
-  @spec getLetters(list(String.t)) :: list(String.t)
+  @spec getLetters(Ai.solutions) :: list(String.t)
+
   def getLetters(solutions) do
     solutions
     |> Enum.join()
@@ -23,15 +27,20 @@ defmodule AiClient.Service.Solutions do
     |> Enum.map(fn ({a, _}) -> a end)
   end
 
+  @spec removeImpossibleSolutions(Ai.solutions, Type.tally) :: Ai.solutions
+
   def removeImpossibleSolutions(solutions, tally) do
     solutions
     |> Enum.filter(fn (word) -> wordMatches(word, tally.letters) end)
   end
 
   @spec wordMatches(String.t, list(String.t)) :: boolean
+
   defp wordMatches(word, letters) do
     String.match?(word, makeRegex(letters))
   end
+
+  @spec makeRegex(list(String.t)) :: Regex.t
 
   defp makeRegex(letters) do
     letters
