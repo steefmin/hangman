@@ -18,7 +18,7 @@ defmodule AiClient.Domain.Ai do
   end
 
   @spec start(integer) :: :ok
-  def start(difficulty) do
+  def start(difficulty) when (difficulty |> is_integer) do
     game = Hangman.newGame(difficulty)
     tally = Hangman.tally(game)
     guess({game, tally}, Solutions.initialSolutions(tally), false)
@@ -35,7 +35,7 @@ defmodule AiClient.Domain.Ai do
     IO.puts(
       [
         "Game over! Result: ",
-        tally.game_state |> to_string,
+        tally.game_state |> to_string(),
         "! The word was: ",
         tally.letters,
       ]
