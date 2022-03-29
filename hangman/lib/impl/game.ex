@@ -22,14 +22,14 @@ defmodule Hangman.Impl.Game do
   @spec newGame :: t
 
   def newGame() do
-    Dictionary.start()
+    Dictionary.start_link()
     |> startGame()
   end
 
   @spec newGame(integer) :: t
 
   def newGame(wordlength) when (wordlength |> is_integer) do
-    Dictionary.start(wordlength)
+    Dictionary.start_link(wordlength)
     |> startGame()
   end
 
@@ -46,7 +46,7 @@ defmodule Hangman.Impl.Game do
   end
 
   @spec startGame(Dictionary.dict) :: t
-  
+
   defp startGame(dict) do
     dict
     |> Dictionary.randomWord()

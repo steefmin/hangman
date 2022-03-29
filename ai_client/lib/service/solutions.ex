@@ -13,7 +13,7 @@ defmodule AiClient.Service.Solutions do
   @spec solutionsWithLength(integer) :: Ai.solutions
 
   defp solutionsWithLength(length) when (length |> is_integer()) do
-    Dictionary.start(length)
+    Dictionary.start_link(length)
     |> Dictionary.words()
   end
 
