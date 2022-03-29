@@ -22,15 +22,15 @@ defmodule Hangman.Impl.Game do
   @spec newGame :: t
 
   def newGame() do
-    Dictionary.start_link()
-    |> startGame()
+    Dictionary.randomWord()
+    |> newGame()
   end
 
   @spec newGame(integer) :: t
 
   def newGame(wordlength) when (wordlength |> is_integer) do
-    Dictionary.start_link(wordlength)
-    |> startGame()
+    Dictionary.randomWord(wordlength)
+    |> newGame()
   end
 
   @spec newGame(String.t()) :: t
@@ -43,14 +43,6 @@ defmodule Hangman.Impl.Game do
         |> String.downcase()
         |> String.codepoints()
     }
-  end
-
-  @spec startGame(Dictionary.dict) :: t
-
-  defp startGame(dict) do
-    dict
-    |> Dictionary.randomWord()
-    |> newGame()
   end
 
   defp assertMinimalWordLength(_word, _length = 0) do

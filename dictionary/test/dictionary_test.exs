@@ -3,8 +3,7 @@ defmodule DictionaryTest do
   doctest Dictionary
 
   test "greets the world" do
-    {:ok, pid} = Dictionary.start_link()
-    assert pid |> Dictionary.words() |> is_list()
-    assert pid |> Dictionary.randomWord() |> is_binary()
+    assert Dictionary.words() |> is_list()
+    assert Dictionary.randomWord() |> is_binary()
   end
 end

@@ -3,6 +3,6 @@ defmodule AiClientTest do
   doctest AiClient
 
   test "greets the world" do
-    assert AiClient.hello() == :world
+    assert AiClient.start() === :ok
   end
 end

@@ -37,14 +37,7 @@ defmodule AiClient.Domain.Ai do
   @spec guess(state, solutions, boolean) :: :ok
 
   defp guess({_game, tally}, _solutions, _interactive) when (tally.game_state in [:won, :lost]) do
-    IO.puts(
-      [
-        "Game over! Result: ",
-        tally.game_state |> to_string(),
-        "! The word was: ",
-        tally.letters,
-      ]
-    )
+    IoService.final(tally)
     :ok
   end
 

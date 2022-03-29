@@ -1,15 +1,15 @@
 defmodule Dictionary do
   @opaque dict :: Dictionary.Runtime.Server.t()
 
-  @spec start_link() :: {atom, dict}
-  defdelegate start_link(), to: Dictionary.Runtime.Server
+  @spec randomWord() :: String.t()
+  defdelegate randomWord(), to: Dictionary.Runtime.Server
 
-  @spec start_link(integer) :: {atom, dict}
-  defdelegate start_link(wordLength), to: Dictionary.Runtime.Server
+  @spec randomWord(integer) :: String.t()
+  defdelegate randomWord(wordLength), to: Dictionary.Runtime.Server
 
-  @spec randomWord(dict) :: String.t()
-  defdelegate randomWord(wordList), to: Dictionary.Runtime.Server
+  @spec words() :: list(String.t())
+  defdelegate words(), to: Dictionary.Runtime.Server
 
-  @spec words(dict) :: list(String.t())
-  defdelegate words(dict), to: Dictionary.Runtime.Server
+  @spec words(integer) :: list(String.t())
+  defdelegate words(wordLength), to: Dictionary.Runtime.Server
 end

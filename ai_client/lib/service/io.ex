@@ -23,6 +23,17 @@ defmodule AiClient.Service.Io do
     :ok
   end
 
+  def final(tally) do
+    IO.puts(
+      [
+        "Game over! Result: ",
+        tally.game_state |> to_string(),
+        "! The word was: ",
+        tally.letters,
+      ]
+    )
+  end
+
   @spec displaySolutions(Ai.solutions) :: String.t
 
   defp displaySolutions(solutions) when (solutions |> length() > 8) do
