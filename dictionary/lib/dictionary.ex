@@ -1,29 +1,16 @@
 defmodule Dictionary do
 
-  @word_list "assets/words.txt"
-  |> File.read!()
-  |> String.split("\n", trim: true)
+  @opaque dict :: Dictionary.Domain.WordList.t
 
-  @spec randomWord() :: String.t()
-  def randomWord() do
-    getWordList()
-    |> Enum.random()
-  end
+  @spec start() :: dict
+  defdelegate start(), to: Dictionary.Domain.WordList
 
-  @spec randomWord(integer) :: String.t()
-  def randomWord(length) do
-    getWordList(length)
-    |> Enum.random()
-  end
+  @spec start(integer) :: dict
+  defdelegate start(wordLength), to: Dictionary.Domain.WordList
 
-  @spec getWordList(integer()) :: list()
-  def getWordList(wordlength) when (wordlength |> is_integer()) do
-    getWordList()
-    |> Enum.filter(fn (word) -> length(word |> String.to_charlist()) === wordlength end)
-  end
+  @spec randomWord(dict) :: String.t
+  defdelegate randomWord(wordList), to: Dictionary.Domain.WordList
 
-  @spec getWordList() :: list()
-  def getWordList() do
-    @word_list
-  end
+  @spec words(dict) :: list(String.t)
+  defdelegate words(dict), to: Dictionary.Domain.WordList
 end

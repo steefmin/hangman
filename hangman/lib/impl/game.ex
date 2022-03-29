@@ -20,11 +20,21 @@ defmodule Hangman.Impl.Game do
   """
 
   @spec newGame :: t
+
   def newGame() do
-    newGame(Dictionary.randomWord())
+    Dictionary.start()
+    |> startGame()
+  end
+
+  @spec newGame(integer) :: t
+
+  def newGame(wordlength) when (wordlength |> is_integer) do
+    Dictionary.start(wordlength)
+    |> startGame()
   end
 
   @spec newGame(String.t()) :: t
+
   def newGame(word) when (word |> is_binary) do
     %__MODULE__{
       letters:
@@ -35,9 +45,12 @@ defmodule Hangman.Impl.Game do
     }
   end
 
-  @spec newGame(integer) :: t
-  def newGame(wordlength) when (wordlength |> is_integer) do
-    newGame(Dictionary.randomWord(wordlength))
+  @spec startGame(Dictionary.dict) :: t
+  
+  defp startGame(dict) do
+    dict
+    |> Dictionary.randomWord()
+    |> newGame()
   end
 
   defp assertMinimalWordLength(_word, _length = 0) do
