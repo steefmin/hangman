@@ -1,10 +1,10 @@
 defmodule AiClient.Domain.Ai do
-  alias AiClient.Service.Solutions
+  alias AiClient.Service.Solutions, as: Solutions
   alias AiClient.Service.Io, as: IoService
 
   @type solutions :: list(String.t)
 
-  def start do
+  def start() do
     game = Hangman.newGame()
     tally = Hangman.tally(game)
     guess({game, tally}, Solutions.initialSolutions(tally), false)
@@ -17,14 +17,14 @@ defmodule AiClient.Domain.Ai do
     guess({game, tally}, Solutions.initialSolutions(tally), false)
   end
 
-  def step_by_step do
+  def step_by_step() do
     game = Hangman.newGame()
     tally = Hangman.tally(game)
     guess({game, tally}, Solutions.initialSolutions(tally), true)
   end
 
   @spec guess({Hangman.Impl.Game.t, Type.tally}, solutions, boolean) :: :ok
-  def guess({_game, tally}, _solutions, _interactive) when (tally.game_state in [:won, :lost]) do
+  defp guess({_game, tally}, _solutions, _interactive) when (tally.game_state in [:won, :lost]) do
     IO.puts(
       [
         "Game over! Result: ",
@@ -35,7 +35,7 @@ defmodule AiClient.Domain.Ai do
     )
   end
 
-  def guess({game, tally}, solutions, interactive) when (tally.game_state in [:initializing, :good_guess, :bad_guess]) do
+  defp guess({game, tally}, solutions, interactive) when (tally.game_state in [:initializing, :good_guess, :bad_guess]) do
     guess = determineGuess(tally, solutions)
     IoService.interact(tally, guess, solutions, interactive)
     {game, tally} = Hangman.makeMove(game, guess)
@@ -43,7 +43,8 @@ defmodule AiClient.Domain.Ai do
     guess({game, tally}, solutions, interactive)
   end
 
-  def determineGuess(tally, solutions) do
+  @spec determineGuess(Type.tally, solutions) :: String.t
+  defp determineGuess(tally, solutions) do
     Solutions.getLetters(solutions)
     |> Enum.filter(fn (letter) -> letter not in tally.used end)
     |> List.first()

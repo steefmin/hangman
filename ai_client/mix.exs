@@ -21,8 +21,9 @@ defmodule AiClient.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:hangman, path: "../hangman"},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:dictionary, path: "../dictionary"},
+      {:hangman, path: "../hangman"},
     ]
   end
 end
