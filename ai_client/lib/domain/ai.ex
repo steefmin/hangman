@@ -33,6 +33,7 @@ defmodule AiClient.Domain.Ai do
         tally.letters,
       ]
     )
+    :ok
   end
 
   defp guess({game, tally}, solutions, interactive) when (tally.game_state in [:initializing, :good_guess, :bad_guess]) do
