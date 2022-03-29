@@ -3,7 +3,14 @@ defmodule AiClient.Domain.Ai do
   alias AiClient.Service.Io, as: IoService
 
   @type solutions :: list(String.t)
+  @typep game :: Hangman.game
+  @typep tally :: Type.tally
+  @typep state :: {
+    game,
+    tally
+  }
 
+  @spec start() :: :ok
   def start() do
     game = Hangman.newGame()
     tally = Hangman.tally(game)
@@ -23,7 +30,7 @@ defmodule AiClient.Domain.Ai do
     guess({game, tally}, Solutions.initialSolutions(tally), true)
   end
 
-  @spec guess({Hangman.Impl.Game.t, Type.tally}, solutions, boolean) :: :ok
+  @spec guess(state, solutions, boolean) :: :ok
   defp guess({_game, tally}, _solutions, _interactive) when (tally.game_state in [:won, :lost]) do
     IO.puts(
       [
