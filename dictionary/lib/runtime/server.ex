@@ -5,9 +5,9 @@ defmodule Dictionary.Runtime.Server do
 
   @type t :: pid
 
-  @spec start_link(integer) :: Agent.on_start
-  def start_link([wordLength] = args) do
-    Agent.start_link(WordList, :start, args, [{:name, buildAgentName(wordLength)}])
+  @spec start_link(list(integer)) :: Agent.on_start
+  def start_link([wordLength]) do
+    Agent.start_link(WordList, :start, [wordLength], [{:name, buildAgentName(wordLength)}])
   end
 
   def start_link(_) do
