@@ -4,6 +4,7 @@ defmodule DictionaryTest do
 
   test "greets the world" do
     assert Dictionary.words() |> is_list()
+    assert Dictionary.words(5) |> is_list()
     assert Dictionary.randomWord() |> is_binary()
   end
 end

@@ -1,16 +1,17 @@
 defmodule Dictionary.Runtime.Server do
   alias Dictionary.Domain.WordList
 
+  use Agent
+
   @type t :: pid
 
-  @spec start_link() :: Agent.on_start
-  def start_link() do
-    Agent.start_link(WordList, :start, [], name: __MODULE__)
+  @spec start_link(integer) :: Agent.on_start
+  def start_link([wordLength] = args) do
+    Agent.start_link(WordList, :start, args, [{:name, buildAgentName(wordLength)}])
   end
 
-  @spec start_link(integer) :: Agent.on_start
-  def start_link(wordlength) do
-    Agent.start_link(WordList, :start, [wordlength], [{:name, buildAgentName(wordlength) }])
+  def start_link(_) do
+    Agent.start_link(WordList, :start, [], name: __MODULE__)
   end
 
   @spec randomWord() :: String.t()
