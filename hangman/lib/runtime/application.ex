@@ -18,7 +18,6 @@ defmodule Hangman.Runtime.Application do
   end
 
   def startGame(value) do
-    IO.puts([IO.ANSI.yellow, ">> new game started", IO.ANSI.reset])
     DynamicSupervisor.start_child(@super_name, {Hangman.Runtime.Server, value})
   end
 end
