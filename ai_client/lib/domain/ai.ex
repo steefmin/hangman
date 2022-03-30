@@ -44,7 +44,7 @@ defmodule AiClient.Domain.Ai do
   defp guess({game, tally}, solutions, interactive) when (tally.game_state in [:initializing, :good_guess, :bad_guess]) do
     guess = determineGuess(tally, solutions)
     IoService.interact(tally, guess, solutions, interactive)
-    {game, tally} = Hangman.makeMove(game, guess)
+    tally = Hangman.makeMove(game, guess)
     solutions = Solutions.removeImpossibleSolutions(solutions, tally)
     guess({game, tally}, solutions, interactive)
   end

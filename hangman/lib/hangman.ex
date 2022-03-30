@@ -5,14 +5,24 @@ defmodule Hangman do
   @opaque game :: Server.t()
 
   @spec newGame() :: game
-  defdelegate newGame(), to: Server, as: :start_link
+  def newGame() do
+    {:ok, pid} = Hangman.Runtime.Application.startGame(nil)
+    pid
+  end
 
   @spec newGame(integer) :: game
-  defdelegate newGame(difficulty), to: Server, as: :start_link
+  def newGame(difficulty) do
+    {:ok, pid} = Hangman.Runtime.Application.startGame(difficulty)
+    pid
+  end
 
-  @spec makeMove(game, String.t()) :: {game, Type.tally}
-  defdelegate makeMove(game, guess), to: Server
+  @spec makeMove(game, String.t()) :: Type.tally
+  def makeMove(game, guess) do
+    Server.makeMove(game, guess)
+  end
 
   @spec tally(game) :: Type.tally
-  defdelegate tally(game), to: Server
+  def tally(game) do
+    Server.tally(game)
+  end
 end

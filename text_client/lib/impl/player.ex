@@ -25,9 +25,8 @@ defmodule TextClient.Impl.Player do
   def interact({game, tally}) do
     IO.puts feedbackFor(tally)
     IO.puts currentWord(tally)
-    game
-    |> Hangman.makeMove(getGuess())
-    |> interact()
+    tally = Hangman.makeMove(game, getGuess())
+    interact({game, tally})
   end
 
   @spec showWord(list(String.t)) :: String.t

@@ -7,14 +7,12 @@ defmodule Hangman.Runtime.Server do
 
   ### Client Process
 
-  def start_link() do
-    {:ok, pid} = GenServer.start_link(__MODULE__, nil)
-    pid
+  def start_link(value) when (value |> is_integer()) do
+    GenServer.start_link(__MODULE__, value)
   end
 
-  def start_link(value) do
-    {:ok, pid} = GenServer.start_link(__MODULE__, value)
-    pid
+  def start_link(_) do
+    GenServer.start_link(__MODULE__, nil)
   end
 
   def tally(pid) do
@@ -22,8 +20,7 @@ defmodule Hangman.Runtime.Server do
   end
 
   def makeMove(pid, guess) do
-    tally = GenServer.call(pid, {:make_move, guess})
-    {pid, tally}
+    GenServer.call(pid, {:make_move, guess})
   end
 
 
