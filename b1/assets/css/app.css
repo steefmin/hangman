@@ -1,0 +1,40 @@
+/* This file is for your main application CSS */
+@import "./phoenix.css";
+
+
+#table > .row  {
+  font-weight: bolder;
+  margin: 1rem;
+}
+
+#table > .row > .label {
+  color: grey;
+}
+
+#table > .row > .value {
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+#figure {
+  margin: 1rem;
+}
+
+input {
+  max-width: 4rem;
+}
+
+.status.lost {
+  color: red;
+  font-weight: bold;
+}
+.status.won {
+  color: green;
+  font-weight: bold;
+}
+.status.initializing {color: #d884c5}
+.status.good-guess {color: green;}
+.status.bad-guess {color: coral;}
+.status.already-used {color: #caa;}
+.status.invalid-guess {color: coral;}
+.status.won {color: darkgreen;}

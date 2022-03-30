@@ -1,0 +1,32 @@
+<h1>This is the game!</h1>
+
+<div id="game" class="row"> 
+    <div class="column column-60" id="table">
+        <div class="row">
+            <div class="column label"> Turns left: </div>
+            <div class="column value"> <%= @tally.turns_left %></div>
+        </div>
+        <div class="row">
+            <div class="column label"> Letters used: </div>
+            <div class="column value"> <%= @tally.used |> Enum.join(", ") %></div>
+        </div>
+        <div class="row">
+            <div class="column label"> Word so far: </div>
+            <div class="column value"> <%= @tally.letters |> Enum.join(" ") %></div>
+        </div>
+
+        <div class="row">
+            <div class="column">
+                <%= move_status(@tally.game_state) %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <%= form(@conn, @tally.game_state) %>
+            </div>
+        </div>
+    </div>
+    <div class="column column-30" id="figure">
+        <pre><%= figure_for(@tally.turns_left) %></pre>
+    </div>
+</div>
