@@ -2,8 +2,9 @@ defmodule B1Web.HangmanController do
   use B1Web, :controller
 
   def index(conn, _params) do
-    conn = assign(conn, :page_title, "Welcome to hangman")
-    render(conn, "index.html")
+    conn
+    |> assign(:page_title, "Welcome to hangman")
+    |> render("index.html")
   end
 
   def create(conn, _params) do
@@ -29,6 +30,7 @@ defmodule B1Web.HangmanController do
       |> Hangman.tally()
 
     conn
+    |> assign(:page_title, "Playing hangman")
     |> assign(:tally, tally)
     |> render("game.html")
   end
