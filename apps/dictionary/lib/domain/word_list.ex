@@ -3,7 +3,7 @@ defmodule Dictionary.Domain.WordList do
 
   @spec start() :: t
   def start() do
-    "/home/steef/development/codestool/hangman/dictionary/assets/words.txt"
+    "/home/steef/development/codestool/hangman_game/apps/dictionary/assets/words.txt"
     |> File.read!()
     |> String.split("\n", trim: true)
   end
