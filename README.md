@@ -1,20 +1,11 @@
 # Hangman Game
 
-Start the fun with: 
+## Run locally
 
 ```
-mix serve
+mix setup   # fetch dependencies
+mix serve   # b1 on http://localhost:4000, b2 on http://localhost:4001
 ```
-to start both Web Clients (b1 and b2 apps) on localhost:4000 and localhost:4001 respectively. 
 
-or
-```
-iex -S mix
-```
-to start the interactive Elixir REPL that gives you access to the Text and AI clients: 
-
-```
-iex> TextClient.start()
-
-iex> AiClient.start()
-```
+Needs Erlang and Elixir installed. For the terminal clients instead, run `iex -S mix`
+and call `TextClient.start()` or `AiClient.start()`.
