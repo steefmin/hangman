@@ -1,5 +1,9 @@
 defmodule Dictionary.Runtime.Application do
+  @moduledoc """
+  OTP application callback that starts the dictionary's supervision tree.
+  """
 
+  @doc "Starts the supervisor with one server per word length."
   def start(_type, _args) do
     buildChildren()
     |> Supervisor.start_link(
