@@ -1,4 +1,7 @@
 defmodule TextClient.Impl.Player do
+  @moduledoc """
+  Drives an interactive terminal game, printing feedback and reading guesses.
+  """
 
   @typep game :: Hangman.game
   @typep tally :: Type.tally
@@ -7,11 +10,13 @@ defmodule TextClient.Impl.Player do
     tally
   }
 
+  @doc "Plays the given game in the terminal until it is won or lost."
   @spec start(game) :: :ok
   def start(game) do
     interact({game, Hangman.tally(game)})
   end
 
+  @doc "Prints the current game state and reads the next guess until the game ends."
   @spec interact(state) :: :ok
   def interact({_game, tally = %{game_state: :won}}) do
     IO.puts(["You won!, ", showWord(tally.letters)])
@@ -28,6 +33,7 @@ defmodule TextClient.Impl.Player do
     interact({game, tally})
   end
 
+  @doc "Returns a message revealing the letters of the word."
   @spec showWord(list(String.t)) :: String.t
   def showWord(letters) do
     "the word was: '#{letters |> Enum.join}'"
