@@ -1,8 +1,13 @@
 defmodule AiClient.Service.Io do
+  @moduledoc """
+  Displays the AI client's guesses, remaining solutions, and game result.
+  """
+
   alias AiClient.Domain.Ai
 
   @spec interact(Type.tally, String.t, Ai.solutions, boolean) :: :ok
 
+  @doc "Displays the current game and guess, pausing for input when interactive mode is enabled."
   def interact(tally, guess, solutions, _interactive = true) do
     interact(tally, guess, solutions, false)
     IO.gets("Press enter to continue....")
@@ -23,6 +28,7 @@ defmodule AiClient.Service.Io do
     :ok
   end
 
+  @doc "Displays the final game result and the word."
   def final(tally) do
     IO.puts(
       [
