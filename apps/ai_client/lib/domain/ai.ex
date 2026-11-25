@@ -1,4 +1,8 @@
 defmodule AiClient.Domain.Ai do
+  @moduledoc """
+  Plays hangman games by choosing guesses from a list of possible solutions.
+  """
+
   alias AiClient.Service.Solutions, as: Solutions
   alias AiClient.Service.Io, as: IoService
 
@@ -12,6 +16,7 @@ defmodule AiClient.Domain.Ai do
 
   @spec start() :: :ok
 
+  @doc "Starts an AI-played game with a randomly selected difficulty."
   def start() do
     game = Hangman.newGame()
     tally = Hangman.tally(game)
@@ -20,6 +25,7 @@ defmodule AiClient.Domain.Ai do
 
   @spec start(integer) :: :ok
 
+  @doc "Starts an AI-played game with the given difficulty."
   def start(difficulty) when (difficulty |> is_integer) do
     game = Hangman.newGame(difficulty)
     tally = Hangman.tally(game)
@@ -28,6 +34,7 @@ defmodule AiClient.Domain.Ai do
 
   @spec step_by_step() :: :ok
 
+  @doc "Starts an AI-played game and pauses after each guess."
   def step_by_step() do
     game = Hangman.newGame()
     tally = Hangman.tally(game)
